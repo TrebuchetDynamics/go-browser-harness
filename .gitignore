@@ -1,0 +1,12 @@
+# Local Python reference checkout.
+browser-harness/
+
+# Go build outputs.
+/bin/
+/dist/
+/coverage.out
+
+# Editor and OS noise.
+.DS_Store
+.idea/
+.vscode/
