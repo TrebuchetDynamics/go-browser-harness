@@ -34,6 +34,7 @@ type ActionRequest struct {
 	PromptText    string         `json:"prompt_text,omitempty"`
 	Question      string         `json:"question,omitempty"`
 	Full          bool           `json:"full,omitempty"`
+	NewTab        bool           `json:"new_tab,omitempty"`
 }
 
 // ActionResult is the JSON result envelope printed by the CLI.
