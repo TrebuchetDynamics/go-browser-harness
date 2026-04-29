@@ -9,8 +9,9 @@ The project is intentionally thin. Browser control should stay close to Chrome D
 This repository currently provides:
 
 - A Go module at `github.com/TrebuchetDynamics/go-browser-harness`.
-- A minimal CLI under `cmd/go-browser-harness`.
-- An exported package under `pkg/harness` for future `gormes-agent` integration.
+- A minimal CLI under `cmd/go-browser-harness` with a Go-native
+  `--action-json` contract for Gormes.
+- An exported package under `pkg/harness` for `gormes-agent` integration.
 - CI checks for linting, race-enabled tests, and a static Linux binary build.
 
 The Python reference checkout may exist locally at `browser-harness/`, but it is ignored by this Go repository and should only be used for behavior reference during later porting work.
@@ -42,3 +43,12 @@ Run the CLI scaffold:
 ```bash
 go run ./cmd/go-browser-harness --version
 ```
+
+Run the Gormes action JSON contract:
+
+```bash
+go run ./cmd/go-browser-harness --action-json '{"schema_version":"gormes.browser.action.v1","kind":"snapshot"}'
+```
+
+Until the live CDP backend is wired, the command returns typed unavailable
+evidence instead of falling back to Python or pretending a browser action ran.
