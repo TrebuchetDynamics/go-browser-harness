@@ -35,9 +35,8 @@ func main() {
 			})
 			os.Exit(2)
 		}
-		result, err := harness.RunAction(context.Background(), req, harness.UnavailableBackend{
-			Reason: "CDP backend not configured",
-		})
+		backend := resolveBackend(context.Background())
+		result, err := harness.RunAction(context.Background(), req, backend)
 		printActionResult(result)
 		if err != nil {
 			os.Exit(1)
@@ -48,6 +47,17 @@ func main() {
 	if err := writeLine(os.Stdout, "go-browser-harness: thin chromedp harness scaffold"); err != nil {
 		log.Fatalf("write status: %v", err)
 	}
+}
+
+// resolveBackend picks a live chromedp backend when CHROME_REMOTE_DEBUGGING_URL
+// is set, or falls back to UnavailableBackend which returns typed evidence
+// without launching Chrome.
+func resolveBackend(ctx context.Context) harness.Backend {
+	backend, err := harness.NewChromedpBackendFromEnv(ctx)
+	if err != nil || backend == nil {
+		return harness.UnavailableBackend{Reason: "CDP backend not configured; set CHROME_REMOTE_DEBUGGING_URL"}
+	}
+	return backend
 }
 
 func writeLine(w io.Writer, line string) error {
