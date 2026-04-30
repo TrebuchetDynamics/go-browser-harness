@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/TrebuchetDynamics/go-browser-harness/internal/buildinfo"
@@ -16,7 +17,17 @@ import (
 func main() {
 	showVersion := flag.Bool("version", false, "print version and exit")
 	actionJSON := flag.String("action-json", "", "execute one Gormes browser action JSON envelope")
+	doctor := flag.Bool("doctor", false, "probe environment health and print a diagnostic table")
 	flag.Parse()
+
+	if *doctor {
+		env := DoctorEnv{
+			ChromeRemoteDebuggingURL: os.Getenv("CHROME_REMOTE_DEBUGGING_URL"),
+			BrowserUseAPIKeyPresent:  os.Getenv("BROWSER_USE_API_KEY") != "",
+			HTTPClient:               http.DefaultClient,
+		}
+		os.Exit(runDoctor(context.Background(), env, os.Stdout))
+	}
 
 	if *showVersion {
 		if err := writeLine(os.Stdout, buildinfo.Version); err != nil {
