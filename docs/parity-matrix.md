@@ -69,7 +69,8 @@ Source-line citations point at the submodule's `browser-harness/src/browser_harn
 
 | Feature | Python ref | Go ref | Status |
 |---|---|---|---|
-| `run_doctor` (full env + endpoint health report) | `admin.py:run_doctor` | — | gap |
+| `run_doctor` (platform, Go/harness version, endpoint health, api-key presence) | `admin.py:run_doctor:601-643` | `cmd/go-browser-harness/doctor.go:runDoctor` | partial — covers endpoint + api-key + platform/version; daemon-alive and active-connection rows deferred until daemon-lifecycle slice; latest-release check deferred (avoids live network in CI) |
+| Latest release check (`_latest_release_tag`) | `admin.py:_latest_release_tag` | — | gap — deferred; fetching GitHub in CI is undesirable |
 | `_doctor_short_text` (redacted display helper) | `admin.py:_doctor_short_text` | — | gap |
 | `_log_tail` (recent daemon logs) | `admin.py:_log_tail` | — | gap |
 
